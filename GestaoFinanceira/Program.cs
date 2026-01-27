@@ -1,5 +1,8 @@
 using GestaoFinanceira.Data;
 using GestaoFinanceira.Models;
+using GestaoFinanceira.Notificacao;
+using GestaoFinanceira.Repositories.Usuario;
+using GestaoFinanceira.Services.Usuario;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -28,8 +31,8 @@ builder.Services.AddIdentityApiEndpoints<Usuario>(options =>
     options.SignIn.RequireConfirmedEmail = false;
     options.User.RequireUniqueEmail = true;
     options.Password.RequireDigit = true;
-    options.Password.RequireLowercase = true;
-    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequiredLength = 6;
 })
@@ -64,6 +67,10 @@ builder.Services.AddSwaggerGen(c=>
     });
     });
 
+
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<INotificador, Notificador>();
 // Add services to the container.
 
 builder.Services.AddControllers();
