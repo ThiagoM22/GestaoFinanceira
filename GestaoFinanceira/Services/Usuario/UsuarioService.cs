@@ -84,7 +84,7 @@ namespace GestaoFinanceira.Services.Usuario
                 UserName = dto.Email, // O userName deve ser único por usuario
                 Email = dto.Email,
                 Ativo = true,
-                DataCadastro = DateTime.UtcNow,
+                DataCadastro = DateTime.UtcNow,    
 
                 EmailConfirmed = true
             };
@@ -182,10 +182,7 @@ namespace GestaoFinanceira.Services.Usuario
             await _crudUser.DeleteUser(usuarinho);
             var resultado = "O usuario " + usuarinho.Nome + " foi apagado";
 
-            return resultado ;
-          
-
-
+            return resultado ;          
         }
 
     }

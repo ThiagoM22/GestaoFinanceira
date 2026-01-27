@@ -1,6 +1,7 @@
 using GestaoFinanceira.Data;
 using GestaoFinanceira.Models;
 using GestaoFinanceira.Notificacao;
+using GestaoFinanceira.Repositories.CateLucro;
 using GestaoFinanceira.Repositories.Usuario;
 using GestaoFinanceira.Services.Usuario;
 using Microsoft.AspNetCore.Identity;
@@ -70,6 +71,7 @@ builder.Services.AddSwaggerGen(c=>
 
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<ICateLucroRepository, CateLucroRepository>();
 builder.Services.AddScoped<INotificador, Notificador>();
 // Add services to the container.
 
