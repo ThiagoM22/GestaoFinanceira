@@ -22,6 +22,7 @@ namespace GestaoFinanceira.Services.CateLucro
             var categorias = await _crud.GetCategoriaLucros(c => c.UsuarioId == userId );
             return categorias.Select(c => new CategoriaLucroResponseDto
             {
+                Id = c.CategoriaLucroId,
                 Nome = c.Nome,
                 Descricao = c.Descricao,
             }).ToList();
@@ -38,6 +39,7 @@ namespace GestaoFinanceira.Services.CateLucro
             }
             return new CategoriaLucroResponseDto
             {
+                Id = categoria.CategoriaLucroId,
                 Nome = categoria.Nome,
                 Descricao = categoria.Descricao,
             };
@@ -54,7 +56,7 @@ namespace GestaoFinanceira.Services.CateLucro
             
 
             var novaCategoria = new CategoriaLucro
-            {
+            {                
                 Nome = dto.Nome,
                 Descricao = dto.Descricao,
                 UsuarioId = userId
@@ -82,6 +84,7 @@ namespace GestaoFinanceira.Services.CateLucro
 
             return new CategoriaLucroResponseDto
             {
+                Id = CategoriaAtualizada.CategoriaLucroId,
                 Nome = CategoriaAtualizada.Nome,
                 Descricao = CategoriaAtualizada.Descricao,
             };

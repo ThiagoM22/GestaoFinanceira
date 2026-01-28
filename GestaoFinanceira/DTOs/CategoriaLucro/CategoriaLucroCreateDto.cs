@@ -9,6 +9,5 @@ namespace GestaoFinanceira.DTOs.CategoriaLucro
         public string Nome { get; set; }
         [StringLength(200)]
         public string Descricao { get; set; }
-        public string UsuarioId { get; set; }
     }
 }
