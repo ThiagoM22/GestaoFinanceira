@@ -1,6 +1,7 @@
 ﻿using GestaoFinanceira.Data;
 using GestaoFinanceira.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace GestaoFinanceira.Repositories.CateLucro
 {
@@ -13,10 +14,15 @@ namespace GestaoFinanceira.Repositories.CateLucro
             _context = context;
         }
 
-        //Listar Categorias de Lucro
-        public async Task<List<CategoriaLucro>> GetCategoriaLucros()
+        //Listar Categorias de Lucro com filtro opcional
+        public async Task<IEnumerable<CategoriaLucro>> GetCategoriaLucros(Expression<Func<CategoriaLucro, bool>>? filtro = null) 
         {
-            return await _context.CategoriaLucros.ToListAsync();
+            IQueryable<CategoriaLucro> query = _context.CategoriaLucros.AsNoTracking();// Evita o rastreamento de alterações para melhor desempenho
+            if (filtro != null) // Aplica o filtro se fornecido
+            {
+                query = query.Where(filtro);
+            }
+            return await query.ToListAsync(); // Executa a consulta e retorna os resultados como uma lista
         }
 
         //Buscar Categoria de Lucro por Id
