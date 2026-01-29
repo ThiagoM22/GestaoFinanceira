@@ -80,7 +80,7 @@ namespace GestaoFinanceira.Services.Lucros
             var novoLucro = new Lucro
             {
                 Valor = dto.Valor,
-                Data = DateTime.UtcNow,
+                Data = dto.Data,
                 Descricao = dto.Descricao,
                 CategoriaLucroId = dto.Categoria,
                 UsuarioId = userId
