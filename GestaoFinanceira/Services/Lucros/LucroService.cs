@@ -21,10 +21,10 @@ namespace GestaoFinanceira.Services.Lucros
         }
 
         //Listar Lucros
-        public async Task<List<LucroResponseDto>> ListarLucros(string userId, int mes, string nomeCategoria)
+        public async Task<List<LucroResponseDto>> ListarLucros(string userId, int? mes, string? nomeCategoria)
         {
             var lucros = await _crud.GetLucros(l => l.UsuarioId == userId);
-            if (mes > 0)
+            if (mes > 0 || mes != null)
             {
                 lucros = lucros.Where(l => l.Data.Month == mes).ToList();
             }
@@ -46,6 +46,7 @@ namespace GestaoFinanceira.Services.Lucros
         public async Task<LucroResponseDto?> BuscarLucroPorId(Guid lucroId, string userId)
         {
             var lucro = await _crud.FindLucroById(lucroId);
+            var categoria = await _categoria.GetCategoriaLucroById(lucro.CategoriaLucroId);
             if (lucro == null || lucro.UsuarioId != userId)
             {
                 _notificador.Adicionar(new Notificacao.Notificacao("Lucro não encontrado"));
@@ -57,7 +58,7 @@ namespace GestaoFinanceira.Services.Lucros
                 Valor = lucro.Valor,
                 Data = lucro.Data,
                 Descricao = lucro.Descricao,
-                Categoria = lucro.CategoriaLucro?.Nome ?? "Sem categoria"
+                Categoria = categoria.Nome
             };
         }
 

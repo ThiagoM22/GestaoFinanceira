@@ -1,6 +1,6 @@
 ﻿using GestaoFinanceira.Data;
 using System.Linq.Expressions;
-using GestaoFinanceira.Models
+using GestaoFinanceira.Models;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +18,9 @@ namespace GestaoFinanceira.Repositories.Lucros
         //Listar Lucros
       public async Task<List<Lucro>> GetLucros(Expression<Func<Lucro, bool>> ? filtro = null)
         {
-            IQueryable<Lucro> query = _context.Lucros.AsNoTracking();
+            IQueryable<Lucro> query = _context.Lucros
+                .Include(l => l.CategoriaLucro)
+                .AsNoTracking();
             if(filtro != null)
             {
                 query = query.Where(filtro);
