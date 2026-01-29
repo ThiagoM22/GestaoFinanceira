@@ -73,20 +73,22 @@ namespace GestaoFinanceira.Services.CateLucro
         //Atualizar Categoria Lucro
         public async Task<CategoriaLucroResponseDto> AtualizarCategoriaLucro(CategoriaLucroCreateDto dto, Guid id)
         {
-             var CategoriaLucro = await _crud.GetCategoriaLucroById(id);
+            var CategoriaLucro = await _crud.GetCategoriaLucroById(id);
             if (CategoriaLucro == null)
             {
                 _notificador.Adicionar(new Notificacao.Notificacao("Categoria de lucro não encontrada"));
                 return null;
             }
+            CategoriaLucro.Nome = dto.Nome;
+            CategoriaLucro.Descricao = dto.Descricao;
 
-            var CategoriaAtualizada = await _crud.UpdateCategoriaLucro(CategoriaLucro);
+            var categoriaAtualizada = await _crud.UpdateCategoriaLucro(CategoriaLucro);
 
             return new CategoriaLucroResponseDto
             {
-                Id = CategoriaAtualizada.CategoriaLucroId,
-                Nome = CategoriaAtualizada.Nome,
-                Descricao = CategoriaAtualizada.Descricao,
+                Id = categoriaAtualizada.CategoriaLucroId,
+                Nome = categoriaAtualizada.Nome,
+                Descricao = categoriaAtualizada.Descricao,
             };
         }
 

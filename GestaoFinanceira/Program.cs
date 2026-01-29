@@ -1,6 +1,7 @@
 using GestaoFinanceira.Data;
 using GestaoFinanceira.Models;
 using GestaoFinanceira.Notificacao;
+using GestaoFinanceira.Repositories.CateGasto;
 using GestaoFinanceira.Repositories.CateLucro;
 using GestaoFinanceira.Repositories.Usuario;
 using GestaoFinanceira.Services.CateLucro;
@@ -69,10 +70,11 @@ builder.Services.AddSwaggerGen(c=>
     });
     });
 
-
+// Sempre ao criar um novo repository ou service adicionar ao scopo da aplicação no program
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<ICateLucroRepository, CateLucroRepository>();
+builder.Services.AddScoped<ICateGastoRepository, CateGastoRepository>();
 builder.Services.AddScoped<ICateLucroService, CateLucroService>();
 builder.Services.AddScoped<INotificador, Notificador>();
 // Add services to the container.
