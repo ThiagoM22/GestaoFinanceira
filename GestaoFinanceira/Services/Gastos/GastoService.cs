@@ -12,10 +12,11 @@ namespace GestaoFinanceira.Services.Gastos
         private readonly INotificador _notificador;
         private readonly ICateGastoRepository _categoria;
 
-        public GastoService(IGastoRepository gastoRepository, INotificador notificador)
+        public GastoService(IGastoRepository gastoRepository, INotificador notificador, ICateGastoRepository categoria)
         {
             _crud = gastoRepository;
             _notificador = notificador;
+            _categoria = categoria;
         }
 
         //Listar Gastos 
@@ -67,7 +68,7 @@ namespace GestaoFinanceira.Services.Gastos
                 _notificador.Adicionar(new Notificacao.Notificacao("O valor do gasto deve ser maior que zero"));
                 return null;
             }
-            var categoria = await _categoria.FindCategoriaGastoById(dto.CategoriaGastoId);
+            var categoria = await _categoria.FindCategoriaGastoById(dto.Categoria);
             if(categoria == null || categoria.UsuarioId != userId)
             {
                 _notificador.Adicionar(new Notificacao.Notificacao("Categoria de gasto não encontrada"));
@@ -78,7 +79,7 @@ namespace GestaoFinanceira.Services.Gastos
                 Valor = dto.Valor,
                 Data = dto.Data,
                 Descricao = dto.Descricao,
-                CategoriaGastoId = dto.CategoriaGastoId,
+                CategoriaGastoId = dto.Categoria,
                 UsuarioId = userId
             };
 
@@ -110,7 +111,7 @@ namespace GestaoFinanceira.Services.Gastos
             gasto.Valor = dto.Valor;
             gasto.Data = dto.Data;
             gasto.Descricao = dto.Descricao;
-            gasto.CategoriaGastoId = dto.CategoriaGastoId;
+            gasto.CategoriaGastoId = dto.Categoria;
             await _crud.UpdateGasto(gasto);
             return new GastoResponseDto
             {
@@ -123,14 +124,9 @@ namespace GestaoFinanceira.Services.Gastos
         }
 
         //Deletar Gasto
-        public async Task<string> DeletarGasto(Guid gastoId, string userId)
+        public async Task<string> DeletarGasto(Guid gastoId)
         {
             var gasto = await _crud.FindGastoById(gastoId);
-            if (gasto == null || gasto.UsuarioId != userId)
-            {
-                _notificador.Adicionar(new Notificacao.Notificacao("Gasto não encontrado"));
-                return null;
-            }
             await _crud.DeleteGasto(gasto);
 
             return "Gasto deletado com sucesso";

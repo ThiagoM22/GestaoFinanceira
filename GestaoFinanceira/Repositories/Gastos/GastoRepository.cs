@@ -15,7 +15,7 @@ namespace GestaoFinanceira.Repositories.Gastos
         }
 
         //Listar Gastos
-        public async Task<IEnumerable<Gasto>> GetGastoa(Expression<Func<Gasto, bool>> ? filtro = null) 
+        public async Task<List<Gasto>> GetGastoa(Expression<Func<Gasto, bool>> ? filtro = null) 
         {
             IQueryable<Gasto> query = _context.Gastos
                 .Include(l => l.CategoriaGasto)

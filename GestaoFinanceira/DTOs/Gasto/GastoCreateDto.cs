@@ -9,6 +9,6 @@ namespace GestaoFinanceira.DTOs.Gasto
         public DateTime Data { get; set; }
         public string Descricao { get; set; } = string.Empty;
         [Required]
-        public Guid CategoriaGastoId { get; set; }
+        public Guid Categoria { get; set; }
     }
 }
