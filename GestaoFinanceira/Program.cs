@@ -1,3 +1,4 @@
+using FluentValidation;
 using GestaoFinanceira.Data;
 using GestaoFinanceira.Models;
 using GestaoFinanceira.Notificacao;
@@ -5,12 +6,15 @@ using GestaoFinanceira.Repositories.CateGasto;
 using GestaoFinanceira.Repositories.CateLucro;
 using GestaoFinanceira.Repositories.Gastos;
 using GestaoFinanceira.Repositories.Lucros;
+using GestaoFinanceira.Repositories.Resumo;
 using GestaoFinanceira.Repositories.Usuario;
 using GestaoFinanceira.Services.CateGasto;
 using GestaoFinanceira.Services.CateLucro;
 using GestaoFinanceira.Services.Gastos;
 using GestaoFinanceira.Services.Lucros;
+using GestaoFinanceira.Services.Resumo;
 using GestaoFinanceira.Services.Usuario;
+using GestaoFinanceira.Validators;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -76,17 +80,34 @@ builder.Services.AddSwaggerGen(c=>
     });
 
 // Sempre ao criar um novo repository ou service adicionar ao scopo da aplicação no program
-builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+
+// Repositórios
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<ICateLucroRepository, CateLucroRepository>();
 builder.Services.AddScoped<ICateGastoRepository, CateGastoRepository>();
 builder.Services.AddScoped<ILucroRepository, LucroRepository>();
 builder.Services.AddScoped<IGastoRepository, GastoRepository>();
+builder.Services.AddScoped<IResumoRepository, ResumoRepository>();
+
+// Serviços
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IResumoService, ResumoService>();
 builder.Services.AddScoped<IGastoService, GastoService>();
 builder.Services.AddScoped<ILucroService, LucroService>();
 builder.Services.AddScoped<ICateGastoService, CateGastoService>();
 builder.Services.AddScoped<ICateLucroService, CateLucroService>();
+
+// Notificação
 builder.Services.AddScoped<INotificador, Notificador>();
+
+//Validators
+builder.Services.AddValidatorsFromAssemblyContaining<UsuarioCreateDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CategoriaGastoCreateDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CategoriaLucroCreateDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<GastoCreateDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<LucroCreateDtoValidator>();
+
+
 // Add services to the container.
 
 builder.Services.AddControllers();

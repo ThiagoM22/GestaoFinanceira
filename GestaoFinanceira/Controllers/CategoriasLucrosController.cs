@@ -3,11 +3,13 @@ using GestaoFinanceira.Services.CateLucro;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using GestaoFinanceira.DTOs.CategoriaLucro;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GestaoFinanceira.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class CategoriasLucrosController : MainController
     {
         private readonly ICateLucroService _service;
