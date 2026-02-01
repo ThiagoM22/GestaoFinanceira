@@ -63,11 +63,6 @@ namespace GestaoFinanceira.Services.Gastos
         //Criar novo Gasto
         public async Task<GastoResponseDto> CriarGasto(GastoCreateDto dto, string userId)
         {
-            if (dto.Valor <= 0)
-            {
-                _notificador.Adicionar(new Notificacao.Notificacao("O valor do gasto deve ser maior que zero"));
-                return null;
-            }
             var categoria = await _categoria.FindCategoriaGastoById(dto.Categoria);
             if(categoria == null || categoria.UsuarioId != userId)
             {
@@ -103,9 +98,10 @@ namespace GestaoFinanceira.Services.Gastos
                 _notificador.Adicionar(new Notificacao.Notificacao("Gasto não encontrado"));
                 return null;
             }
-            if (dto.Valor <= 0)
+            var categoria = await _categoria.FindCategoriaGastoById(dto.Categoria);
+            if (categoria == null || categoria.UsuarioId != userId)
             {
-                _notificador.Adicionar(new Notificacao.Notificacao("O valor do gasto deve ser maior que zero"));
+                _notificador.Adicionar(new Notificacao.Notificacao("Categoria de gasto não encontrada"));
                 return null;
             }
             gasto.Valor = dto.Valor;
@@ -119,7 +115,7 @@ namespace GestaoFinanceira.Services.Gastos
                 Valor = gasto.Valor,
                 Data = gasto.Data,
                 Descricao = gasto.Descricao,
-                Categoria = gasto.CategoriaGasto?.Nome ?? "Sem categoria"
+                Categoria = categoria.Nome
             };
         }
 

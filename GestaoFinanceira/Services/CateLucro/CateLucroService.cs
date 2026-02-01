@@ -20,6 +20,11 @@ namespace GestaoFinanceira.Services.CateLucro
         public async Task<List<CategoriaLucroResponseDto>> ListarCategoriasLucro(string userId)
         {
             var categorias = await _crud.GetCategoriaLucros(c => c.UsuarioId == userId );
+            if(categorias == null || !categorias.Any())
+            {
+                _notificador.Adicionar(new Notificacao.Notificacao("Nenhuma categoria de lucro encontrada"));
+                return null;
+            }
             return categorias.Select(c => new CategoriaLucroResponseDto
             {
                 Id = c.CategoriaLucroId,
@@ -47,14 +52,7 @@ namespace GestaoFinanceira.Services.CateLucro
 
         //Criar Categoria de Lucro
         public async Task<CategoriaLucroResponseDto> CriarCategoriaLucro(CategoriaLucroCreateDto dto, string userId)
-        {
-            if (string.IsNullOrWhiteSpace(dto.Nome))
-            {
-                _notificador.Adicionar(new Notificacao.Notificacao("O nome da categoria de lucro é obrigatório"));
-                return null;
-            }
-            
-
+        {           
             var novaCategoria = new CategoriaLucro
             {                
                 Nome = dto.Nome,
@@ -79,6 +77,7 @@ namespace GestaoFinanceira.Services.CateLucro
                 _notificador.Adicionar(new Notificacao.Notificacao("Categoria de lucro não encontrada"));
                 return null;
             }
+
             CategoriaLucro.Nome = dto.Nome;
             CategoriaLucro.Descricao = dto.Descricao;
 

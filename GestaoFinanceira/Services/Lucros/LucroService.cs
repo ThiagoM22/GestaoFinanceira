@@ -65,16 +65,11 @@ namespace GestaoFinanceira.Services.Lucros
         //Criar Lucro
         public async Task<LucroResponseDto> CriarLucro(LucroCreateDto dto, string userId)
         {
-            if (dto.Valor <= 0)
-            {
-                _notificador.Adicionar(new Notificacao.Notificacao("O valor do lucro deve ser maior que zero"));
-                return null;
-            }
             var categoria = await _categoria.GetCategoriaLucroById(dto.Categoria);
 
             if (categoria == null || categoria.UsuarioId != userId)
             {
-                _notificador.Adicionar(new Notificacao.Notificacao("Categoria de lucro inválida"));
+                _notificador.Adicionar(new Notificacao.Notificacao("Categoria de lucro não encontrada"));
                 return null;
             }
             var novoLucro = new Lucro
@@ -100,8 +95,8 @@ namespace GestaoFinanceira.Services.Lucros
         //Atualizar Lucro
         public async Task<LucroResponseDto> AtualizarLucro(Guid lucroId, LucroCreateDto dto, string userId)
         {
-            var lucroExistente = await _crud.FindLucroById(lucroId);
-            if (lucroExistente == null || lucroExistente.UsuarioId != userId)
+            var lucro = await _crud.FindLucroById(lucroId);
+            if (lucro == null || lucro.UsuarioId != userId)
             {
                 _notificador.Adicionar(new Notificacao.Notificacao("Lucro não encontrado"));
                 return null;
@@ -109,19 +104,20 @@ namespace GestaoFinanceira.Services.Lucros
             var categoria = await _categoria.GetCategoriaLucroById(dto.Categoria);
             if (categoria == null || categoria.UsuarioId != userId)
             {
-                _notificador.Adicionar(new Notificacao.Notificacao("Categoria de lucro inválida"));
+                _notificador.Adicionar(new Notificacao.Notificacao("Categoria de lucro não encontarda"));
                 return null;
             }
-            lucroExistente.Valor = dto.Valor;
-            lucroExistente.Descricao = dto.Descricao;
-            lucroExistente.CategoriaLucroId = dto.Categoria;
-            await _crud.UpdateLucro(lucroExistente);
+            lucro.Valor = dto.Valor;
+            lucro.Data = dto.Data;
+            lucro.Descricao = dto.Descricao;
+            lucro.CategoriaLucroId = dto.Categoria;
+            await _crud.UpdateLucro(lucro);
             return new LucroResponseDto
             {
-                Id = lucroExistente.LucroId,
-                Valor = lucroExistente.Valor,
-                Data = lucroExistente.Data,
-                Descricao = lucroExistente.Descricao,
+                Id = lucro.LucroId,
+                Valor = lucro.Valor,
+                Data = lucro.Data,
+                Descricao = lucro.Descricao,
                 Categoria = categoria.Nome
             };
         }

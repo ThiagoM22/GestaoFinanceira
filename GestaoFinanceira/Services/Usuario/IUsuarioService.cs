@@ -7,7 +7,7 @@ namespace GestaoFinanceira.Services.Usuario
         Task<UsuarioResponseDto> ResgistrarUsuario(UsuarioCreateDto dto);
         Task<UsuarioResponseDto> DesativarUsuario(string id);
         Task<UsuarioResponseDto> BuscarUsuarioPorId(string id);
-        Task<UsuarioResponseDto> AtualizarNome(string id, string nome);
+        Task<UsuarioResponseDto> AtualizarNome(string id, UsuarioUpdateNameDto dto);
         Task<string> DeletarUsuario(string id);
     }
 }

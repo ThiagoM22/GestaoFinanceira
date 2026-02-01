@@ -23,6 +23,12 @@ namespace GestaoFinanceira.Services.Usuario
         public async Task<List<UsuarioResponseDto>> ListarUsuarios()
         {
             var usuarios = await _crudUser.GetUsers(); // Buscando usuarios no banco de dados
+
+            if(usuarios == null || !usuarios.Any())
+            {
+                _notificador.Adicionar(new Notificacao.Notificacao("Nenhum usuário encontrado"));
+                return null;
+            }
             // Mapeando para UsuarioResponseDto
             return usuarios.Select(u => new UsuarioResponseDto
             {
@@ -64,19 +70,6 @@ namespace GestaoFinanceira.Services.Usuario
                 _notificador.Adicionar(new Notificacao.Notificacao("DTO não pode ser nulo"));
                 return null;
             }
-            // Verifica se o campos Nome foi preenchido
-            if (string.IsNullOrEmpty(dto.Nome))
-            {
-                _notificador.Adicionar(new Notificacao.Notificacao("Nome é obrigatório"));
-                return null;
-            }
-            //Verifica se o campos Email foi preenchido
-            if (string.IsNullOrEmpty(dto.Email))
-            {
-                _notificador.Adicionar(new Notificacao.Notificacao("Email é obrigatório"));
-                return null;
-            }
-       
             // Mapeando DTO para Modelo
             var usuario = new Models.Usuario
             {      
@@ -137,7 +130,7 @@ namespace GestaoFinanceira.Services.Usuario
             };
         }
 
-        public async Task<UsuarioResponseDto> AtualizarNome(string id, string nome)
+        public async Task<UsuarioResponseDto> AtualizarNome(string id, UsuarioUpdateNameDto dto)
         {
             //Buscando usuario pelo id
             var usuario = await _crudUser.GetUserById(id);
@@ -147,14 +140,8 @@ namespace GestaoFinanceira.Services.Usuario
                 _notificador.Adicionar(new Notificacao.Notificacao("Usuário não encontrado"));
                 return null;
             }
-            //Verificando se o campo Nome foi preenchido
-            if (string.IsNullOrEmpty(nome))
-            {
-                _notificador.Adicionar(new Notificacao.Notificacao("Nome é obrigatório"));
-                return null;
-            }
             //Alterando o nome do usuario
-            usuario.Nome = nome;
+            usuario.Nome = dto.Nome;
             //Salvando a alteração no banco de dados
             await _crudUser.UpdateUser(usuario);
             // Mapeando para UsuarioResponseDto e retornando

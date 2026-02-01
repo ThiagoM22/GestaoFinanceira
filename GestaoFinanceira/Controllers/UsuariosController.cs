@@ -53,7 +53,7 @@ namespace GestaoFinanceira.Controllers
 
         // PUT: api/Usuarios/{id}
         [HttpPut("{id}")]
-        public async Task<ActionResult<UsuarioResponseDto>> PutUsuario(string id, string nome)
+        public async Task<ActionResult<UsuarioResponseDto>> PutUsuario(string id, [FromBody] UsuarioUpdateNameDto nome)
         {
             var usuarioAtualizado = await _usuarioService.AtualizarNome(id, nome);
             return CustomResponse(usuarioAtualizado);

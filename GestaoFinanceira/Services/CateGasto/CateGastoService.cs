@@ -20,6 +20,11 @@ namespace GestaoFinanceira.Services.CateGasto
         public async Task<List<CategoriaGastoResponseDto>> ListarCategoriasGasto(string userId)
         {
             var categorias = await _crud.GetCategoriaGasto(c => c.UsuarioId == userId);
+            if(categorias == null || !categorias.Any())
+            {
+                _notificador.Adicionar(new Notificacao.Notificacao("Nenhuma categoria de gasto encontrada"));
+                return null;
+            }
             return categorias.Select(c => new CategoriaGastoResponseDto
             {
                 Id = c.CategoriaGastoId,
@@ -47,12 +52,7 @@ namespace GestaoFinanceira.Services.CateGasto
 
         //Criar Categoria de Gasto
         public async Task<CategoriaGastoResponseDto> CriarCategoriaGasto(CategoriaGastoCreateDto dto, string userId)
-        {
-            if (string.IsNullOrWhiteSpace(dto.Nome))
-            {
-                _notificador.Adicionar(new Notificacao.Notificacao("O nome da categoria de gasto é obrigatório"));
-                return null;
-            }
+        { 
             var novaCategoria = new CategoriaGasto
             {
                 Nome = dto.Nome,
@@ -77,11 +77,6 @@ namespace GestaoFinanceira.Services.CateGasto
                 _notificador.Adicionar(new Notificacao.Notificacao("Categoria de Gasto não encontrada"));
                 return null;
             }
-            if (string.IsNullOrWhiteSpace(dto.Nome))
-            {
-                _notificador.Adicionar(new Notificacao.Notificacao("O nome da categoria de gasto é obrigatório"));
-                return null;
-            }
             categoriaExistente.Nome = dto.Nome;
             categoriaExistente.Descricao = dto.Descricao;
             var categoriaAtualizada = await _crud.UpdateCategoriaGasto(categoriaExistente);
@@ -103,9 +98,7 @@ namespace GestaoFinanceira.Services.CateGasto
                 return null;
             }
             await _crud.DeleteCategoriaGasto(categoriaExistente);
-
             var resposta = "Categoria de Gasto deletada com sucesso";
-
             return resposta;
         }
     }
