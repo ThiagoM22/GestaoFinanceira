@@ -25,7 +25,7 @@ namespace GestaoFinanceira.Controllers
                 return BadRequest(new
                 {
                     sucesso = false,
-                    errors = _notificador.ObterNotificacoes().Select(n => n.Mensagem)
+                    erros = _notificador.ObterNotificacoes().Select(n => n.Mensagem)
                 });
             }
 
@@ -34,14 +34,16 @@ namespace GestaoFinanceira.Controllers
                 return NotFound(new
                 {
                     sucesso = false,
-                    data = new[] {"Nenhum registro encontrado"}
+                    dados = new[] { "Nenhum registro encontrado" },
+                    erros = _notificador.ObterNotificacoes().Select(n => n.Mensagem)
                 });
             }
 
             return Ok(new
             {
                 sucesso = true,
-                dados = result
+                dados = result,
+                erros = _notificador.ObterNotificacoes().Select(n => n.Mensagem)
             });
         }         
 

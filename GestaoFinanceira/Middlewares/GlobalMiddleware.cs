@@ -22,10 +22,8 @@ namespace GestaoFinanceira.Middlewares
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Erro inesperado {Message}", ex.Message);
-                await HandleExceptionAsync(context, ex); // Trata a exceção e retorna uma resposta adequada
+                await HandleExceptionAsync(context, ex);
             }
-
-
         }
 
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)

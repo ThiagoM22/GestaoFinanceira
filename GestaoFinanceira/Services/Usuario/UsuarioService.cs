@@ -41,7 +41,7 @@ namespace GestaoFinanceira.Services.Usuario
         }
 
         //Buscar Usuario por Id
-        public async Task<UsuarioResponseDto> BuscarUsuarioPorId(string id)
+        public async Task<UsuarioResponseDto?> BuscarUsuarioPorId(string id)
         {
             var usuario = await _crudUser.GetUserById(id); // Buscando usuario pelo id
             // Verificando se o usuario existe
@@ -105,21 +105,18 @@ namespace GestaoFinanceira.Services.Usuario
         }
 
         //Desativar Usuario
-        public async Task<UsuarioResponseDto> DesativarUsuario(string id)
+        public async Task<UsuarioResponseDto?> DesativarUsuario(string id)
         {
-            // Buscando usuario pelo id
             var usuario = await _crudUser.GetUserById(id);
-            //Verificando se o usuario existe
+
             if (usuario == null)
             {
                 _notificador.Adicionar(new Notificacao.Notificacao("Usuário não encontrado"));
                 return null;
             }
-            //Alterando o status do usuario para inativo
+
             usuario.Ativo = false;
-            // Salvando as alterações no banco de dados
             await _crudUser.UpdateUser(usuario);
-            //Mapeando para UsuarioResponseDto e retornando
             return new UsuarioResponseDto
             {
                 Id = usuario.Id,
@@ -140,11 +137,9 @@ namespace GestaoFinanceira.Services.Usuario
                 _notificador.Adicionar(new Notificacao.Notificacao("Usuário não encontrado"));
                 return null;
             }
-            //Alterando o nome do usuario
+
             usuario.Nome = dto.Nome;
-            //Salvando a alteração no banco de dados
             await _crudUser.UpdateUser(usuario);
-            // Mapeando para UsuarioResponseDto e retornando
             return new UsuarioResponseDto
             {
                 Id = usuario.Id,

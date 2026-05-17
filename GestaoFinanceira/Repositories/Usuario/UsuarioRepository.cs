@@ -21,10 +21,10 @@ namespace GestaoFinanceira.Repositories.Usuario
         }
 
         //Buscar Usuario por Id
-        public async Task<Models.Usuario> GetUserById(string id)
+        public async Task<Models.Usuario?> GetUserById(string id)
         {
-            var usuario = await _context.Users.FindAsync(id); // Busca o usuário pelo Id
-            return usuario; // Retorna o usuário encontrado
+            var usuario = await _context.Users.FindAsync(id); 
+            return usuario; 
         }
 
         //Criar Usuario com base no IdentityUser
@@ -38,17 +38,17 @@ namespace GestaoFinanceira.Repositories.Usuario
         //Atualizar Usuario
         public async Task<Models.Usuario> UpdateUser(Models.Usuario usuario)
         {
-            _context.Users.Update(usuario); // Atualiza o usuário no contexto
-            await _context.SaveChangesAsync(); // Salva as alterações no banco de dados
-            return usuario; // Retorna o usuário atualizado
+            _context.Users.Update(usuario); 
+            await _context.SaveChangesAsync(); 
+            return usuario; 
         }
 
         //Deletar Usuario
         public async Task<bool> DeleteUser(Models.Usuario usuario)
         {
-            _context.Users.Remove(usuario); // Remove o usuário do contexto
-            await _context.SaveChangesAsync(); // Salva as alterações no banco de dados
-            return true; // Retorna true indicando que a operação foi bem-sucedida
+            _context.Users.Remove(usuario); 
+            await _context.SaveChangesAsync(); 
+            return true; 
         }
     }
 }
