@@ -17,6 +17,7 @@ using GestaoFinanceira.Services.Resumo;
 using GestaoFinanceira.Services.Usuario;
 using GestaoFinanceira.Validators;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -111,8 +112,31 @@ builder.Services.AddValidatorsFromAssemblyContaining<UsuarioUpdateNameDtoValidat
 
 // Add services to the container.
 
-builder.Services.AddControllers()
-    .AddFluentValidation();
+builder.Services.AddControllers();
+
+builder.Services.AddFluentValidationAutoValidation(); // Habilita a validação automática do FluentValidation para os modelos de entrada (DTOs) nas ações dos controladores
+builder.Services.AddValidatorsFromAssemblyContaining<Program>(); // Registra os validadores do FluentValidation a partir do assembly atual (Program.cs)
+
+// Configura a resposta personalizada para erros de validação do modelo
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var erros = context.ModelState
+            .Where(e => e.Value?.Errors.Count > 0)
+            .SelectMany(e => e.Value!.Errors)
+            .Select(e => e.ErrorMessage)
+            .ToList();
+
+        return new BadRequestObjectResult(new
+        {
+            sucesso = false,
+            erros
+        });
+    };
+});
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAuthentication();

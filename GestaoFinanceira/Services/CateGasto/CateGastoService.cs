@@ -16,7 +16,6 @@ namespace GestaoFinanceira.Services.CateGasto
             _crud = crud;
         }
 
-        //Listar Categorias de Gasto
         public async Task<List<CategoriaGastoResponseDto>> ListarCategoriasGasto(string userId)
         {
             var categorias = await _crud.GetCategoriaGasto(c => c.UsuarioId == userId);
@@ -33,7 +32,6 @@ namespace GestaoFinanceira.Services.CateGasto
             }).ToList();
         }
 
-        //Buscar Categoria de Gasto por Id
         public async Task<CategoriaGastoResponseDto> BuscarCategoriaGastoPorId(Guid categoriaGastoId, string userId)
         {
             var categoria = await _crud.FindCategoriaGastoById(categoriaGastoId);
@@ -50,7 +48,6 @@ namespace GestaoFinanceira.Services.CateGasto
             };
         }
 
-        //Criar Categoria de Gasto
         public async Task<CategoriaGastoResponseDto> CriarCategoriaGasto(CategoriaGastoCreateDto dto, string userId)
         { 
             var novaCategoria = new CategoriaGasto
@@ -68,7 +65,6 @@ namespace GestaoFinanceira.Services.CateGasto
             };
         }
 
-        //Atualizar Categoria de Gasto
         public async Task<CategoriaGastoResponseDto> AtualizarCategoriaGasto(Guid categoriaGastoId, CategoriaGastoCreateDto dto, string userId)
         {
             var categoriaExistente = await _crud.FindCategoriaGastoById(categoriaGastoId);
@@ -88,7 +84,6 @@ namespace GestaoFinanceira.Services.CateGasto
             };
         }
 
-        //Deletar Categoria de Gasto
         public async Task<string> DeletarCategoriaGasto(Guid categoriaGastoId, string userId)
         {
             var categoriaExistente = await _crud.FindCategoriaGastoById(categoriaGastoId);

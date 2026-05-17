@@ -1,4 +1,5 @@
 ﻿using GestaoFinanceira.Notificacao;
+using Microsoft.AspNetCore.Components.Forms.Mapping;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GestaoFinanceira.Controllers
@@ -12,65 +13,37 @@ namespace GestaoFinanceira.Controllers
             _notificador = notificador;
         }
 
-        protected bool TemNotificacoes()
-        {
-            return _notificador.TemNotificacoes();
-        }
+        protected bool TemNotificacoes() => _notificador.TemNotificacoes();
+
+        protected void NotificarErro(string mensagem) => _notificador.Adicionar(new Notificacao.Notificacao(mensagem));
 
         protected ActionResult CustomResponse(object? result = null)
         {
-            try
-            {
-                // Verifica se há notificações de erro
-                if (result is null)
-                {
-                    return NotFound(new
-                    {
-                        sucesso = true,
-                        avisos = "Sem registros para exibir",
-                        erros = _notificador.ObterNotificacoes().Select(n => n.Mensagem),// Retorna as mensagens de notificação como erros
-                        dados = result
-                    });
-                }
-                // Retorna resposta de sucesso se não houver notificações
-                if (result is Exception)
-                {
-                    return BadRequest(new
-                    {
-                        sucesso = false,
-                        avisos = "Ocorreu um erro ao processar a solicitação.",
-                    });
-                }
-                if (_notificador.TemNotificacoes())
-                {
-                    return BadRequest(new
-                    {
-                        sucesso = false,
-                        erros = _notificador.ObterNotificacoes().Select(n => n.Mensagem)// Retorna as mensagens de notificação como erros
-                    });
-                }
-                else
-                {
-                    return Ok(new
-                    {
-                        sucesso = true,
-                        dados = result
-                    });
-                }
-            }
-            catch (Exception ex)
+
+            if (TemNotificacoes())
             {
                 return BadRequest(new
                 {
                     sucesso = false,
-                    erros = new List<string> {ex.ToString() }
+                    errors = _notificador.ObterNotificacoes().Select(n => n.Mensagem)
                 });
             }
-        }
-        // Notificar erro com opção de log
-        protected void NotificarErro(Exception exception, params object[] dados)
-        {
-            NotificarErro(exception, true, dados);
-        }
+
+            if (result == null) 
+            {
+                return NotFound(new
+                {
+                    sucesso = false,
+                    data = new[] {"Nenhum registro encontrado"}
+                });
+            }
+
+            return Ok(new
+            {
+                sucesso = true,
+                dados = result
+            });
+        }         
+
     }
 }

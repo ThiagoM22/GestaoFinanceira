@@ -7,7 +7,7 @@
         {
             _notificacoes = new List<Notificacao>(); // Inicializa a lista de notificações
         }
-        public void Adicionar(Notificacao notificacao, params object[] dados) // Adiciona uma nova notificação à lista
+        public void Adicionar(Notificacao notificacao, params object[] dados) // Adiciona uma nova notificação à lista 
         {
             _notificacoes.Add(notificacao);
         }
