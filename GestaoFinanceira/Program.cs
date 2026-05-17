@@ -24,8 +24,11 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configurando o DbContext com SQL Server usando a string de conexão do appsettings.json
+// Buscar a connection string
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// Registrar o DbContext configurado para PostgreSQL
 builder.Services.AddDbContext<ApiDbContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
 
 builder.Services.AddCors(options =>
 {

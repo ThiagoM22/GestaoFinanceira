@@ -1,6 +1,7 @@
 ﻿using GestaoFinanceira.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace GestaoFinanceira.Data
 {
@@ -33,6 +34,8 @@ namespace GestaoFinanceira.Data
                 .WithMany()
                 .HasForeignKey(l => l.CategoriaLucroId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            
         }
     }
 }

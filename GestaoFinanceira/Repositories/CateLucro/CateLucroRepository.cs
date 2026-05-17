@@ -17,8 +17,8 @@ namespace GestaoFinanceira.Repositories.CateLucro
         //Listar Categorias de Lucro com filtro opcional
         public async Task<IEnumerable<CategoriaLucro>> GetCategoriaLucros(Expression<Func<CategoriaLucro, bool>>? filtro = null) 
         {
-            IQueryable<CategoriaLucro> query = _context.CategoriaLucros.AsNoTracking();// Evita o rastreamento de alterações para melhor desempenho
-            if (filtro != null) // Aplica o filtro se fornecido
+            IQueryable<CategoriaLucro> query = _context.CategoriaLucros.AsNoTracking();
+            if (filtro != null) 
             {
                 query = query.Where(filtro);
             }

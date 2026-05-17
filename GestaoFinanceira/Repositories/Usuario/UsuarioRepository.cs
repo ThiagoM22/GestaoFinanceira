@@ -1,4 +1,5 @@
 ﻿using GestaoFinanceira.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -16,7 +17,7 @@ namespace GestaoFinanceira.Repositories.Usuario
         // Listar Usuario
         public async Task<List<Models.Usuario>> GetUsers()
         {
-            var usuarios = await _context.Users.ToListAsync(); // Busca todos os usuários do banco de dados
+            var usuarios = await _context.Users.ToListAsync();
             return usuarios; // Retorna a lista de usuários
         }
 
@@ -25,7 +26,7 @@ namespace GestaoFinanceira.Repositories.Usuario
         {
             var usuario = await _context.Users.FindAsync(id); 
             return usuario; 
-        }
+        }     
 
         //Criar Usuario com base no IdentityUser
         public async Task<Models.Usuario> CreateUser(Models.Usuario usuario)
