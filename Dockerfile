@@ -3,21 +3,23 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copia o arquivo de projeto usando curingas para evitar erros de caminhos de pastas
-COPY *.csproj ./
-RUN dotnet restore
+# 1. Copia o arquivo .csproj de dentro da subpasta GestaoFinanceira
+COPY ["GestaoFinanceira/GestaoFinanceira.csproj", "GestaoFinanceira/"]
 
-# Copia todo o restante do código
+# 2. Executa o restore apontando diretamente para o arquivo copiado
+RUN dotnet restore "GestaoFinanceira/GestaoFinanceira.csproj"
+
+# 3. Copia todo o resto dos arquivos do repositório
 COPY . .
 
-# Compila o projeto diretamente no diretório atual
-RUN dotnet publish -c Release -o /app/publish
+# 4. Entra na subpasta onde o código principal está antes de compilar
+WORKDIR "/src/GestaoFinanceira"
+RUN dotnet publish "GestaoFinanceira.csproj" -c Release -o /app/publish
 
+# --- Estágio Final ---
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 
-# CONFIGURAÇÃO CRUCIAL PARA O RENDER:
-# O Render exige a porta 10000 por padrão no plano Web Service
 EXPOSE 10000
 ENV ASPNETCORE_URLS=http://+:10000
 
