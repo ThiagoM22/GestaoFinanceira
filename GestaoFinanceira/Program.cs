@@ -149,7 +149,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("/swagger/index.html", "Gestão Financeira");
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Gestão Financeira");
     c.RoutePrefix = string.Empty;
 });
 
