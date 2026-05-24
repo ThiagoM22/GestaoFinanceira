@@ -16,7 +16,7 @@ namespace GestaoFinanceira.Repositories.Lucros
         }
 
         //Listar Lucros
-      public async Task<List<Lucro>> GetLucros(Expression<Func<Lucro, bool>> ? filtro = null)
+        public async Task<List<Lucro>> GetLucros(Expression<Func<Lucro, bool>> ? filtro = null)
         {
             IQueryable<Lucro> query = _context.Lucros
                 .Include(l => l.CategoriaLucro)
