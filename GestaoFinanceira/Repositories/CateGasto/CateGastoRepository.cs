@@ -18,10 +18,9 @@ namespace GestaoFinanceira.Repositories.CateGasto
         public async Task<IEnumerable<CategoriaGasto>> GetCategoriaGasto(Expression<Func<CategoriaGasto, bool>>?filtro = null)
         {
             IQueryable<CategoriaGasto> query = _context.CategoriaGastos.AsNoTracking();
-            if(filtro  != null)
-            {
+            if(filtro  != null)            
                 query = query.Where(filtro);
-            }
+
             return await query.ToListAsync();
         }
 

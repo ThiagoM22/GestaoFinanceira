@@ -7,10 +7,10 @@ using GestaoFinanceira.Repositories.CateGasto;
 using GestaoFinanceira.Repositories.CateLucro;
 using GestaoFinanceira.Repositories.Gastos;
 using GestaoFinanceira.Repositories.Lucros;
-using GestaoFinanceira.Repositories.Resumo;
 using GestaoFinanceira.Repositories.Usuario;
 using GestaoFinanceira.Services.CateGasto;
 using GestaoFinanceira.Services.CateLucro;
+using GestaoFinanceira.Services.Comparacao;
 using GestaoFinanceira.Services.Gastos;
 using GestaoFinanceira.Services.Lucros;
 using GestaoFinanceira.Services.Resumo;
@@ -23,10 +23,7 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configurando o DbContext com SQL Server usando a string de conexão do appsettings.json
-// Buscar a connection string
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-// Registrar o DbContext configurado para PostgreSQL
 builder.Services.AddDbContext<ApiDbContext>(options =>
     options.UseNpgsql(connectionString));
 
@@ -92,7 +89,6 @@ builder.Services.AddScoped<ICateLucroRepository, CateLucroRepository>();
 builder.Services.AddScoped<ICateGastoRepository, CateGastoRepository>();
 builder.Services.AddScoped<ILucroRepository, LucroRepository>();
 builder.Services.AddScoped<IGastoRepository, GastoRepository>();
-builder.Services.AddScoped<IResumoRepository, ResumoRepository>();
 
 // Serviços
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
@@ -101,6 +97,7 @@ builder.Services.AddScoped<IGastoService, GastoService>();
 builder.Services.AddScoped<ILucroService, LucroService>();
 builder.Services.AddScoped<ICateGastoService, CateGastoService>();
 builder.Services.AddScoped<ICateLucroService, CateLucroService>();
+builder.Services.AddScoped<IComparacaoService, ComparacaoService>();
 
 // Notificação
 builder.Services.AddScoped<INotificador, Notificador>();
