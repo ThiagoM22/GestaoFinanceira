@@ -147,7 +147,11 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/index.html", "Gestão Financeira");
+    c.RoutePrefix = string.Empty;
+});
 
 app.UseHttpsRedirection();
 
